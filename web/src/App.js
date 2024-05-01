@@ -6,6 +6,7 @@ import NoPage from './pages/NoPage';
 import Review from './pages/Review';
 import Post from './pages/Post';
 import Certificate from './pages/Certificate';
+import FileUpload from './pages/FileUpload';
 
 function App() {
   return (

@@ -1,7 +1,12 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom';
 import ReviewTable from '../components/ReviewTable'
 
 function Review() {
+  const navigate = useNavigate()
+  const generate =()=>{
+    navigate("/generated")
+  }
   return (
     <div className='bg-primary min-h-screen flex text-center flex-col text-white'>
         <div>
@@ -12,7 +17,7 @@ function Review() {
         </div>
         <div className='w-[80%] mx-auto my-6'>
         <ReviewTable />
-        <button className='bg-cusred p-2 m-6 rounded-lg text-white '>
+        <button onClick={generate} className='bg-cusred p-2 m-6 rounded-lg text-white '>
           Generate Certificates
         </button>
         </div>

@@ -1,10 +1,20 @@
-import React from 'react'
+import React, { useState } from 'react'
 import jsonData from '../data/data.json'
+import axios from 'axios'
 
 function ReviewTable() {
+   const baseURL = 'http://localhost:3001/api/verify';
+
+    const [data,setData] = useState([])
+    React.useEffect(() => {
+        axios.get(baseURL).then((response) => {
+          setData(response.data);
+        });
+      }, []);
+      console.log(data)
     return (
         <div>
-            <div className="relative overflow-x-auto">
+        {!data?<p>Loding</p>:<div className="relative overflow-x-auto">
                 <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                     <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
@@ -26,7 +36,7 @@ function ReviewTable() {
                         </tr>
                     </thead>
                     <tbody>
-                        {jsonData.map((student, index) => (
+                        {data.map((student, index) => (
                             <tr key={index} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                                 <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                     {student.studentName}
@@ -35,7 +45,7 @@ function ReviewTable() {
                                     {student.enrolledDate}
                                 </td>
                                 <td className="px-6 py-4">
-                                    {student.enrolledDate_1}
+                                    {student.courseTitle}
                                 </td>
                                 <td className="px-6 py-4">
                                     {student.studentEmail}
@@ -47,7 +57,8 @@ function ReviewTable() {
                         ))}
                     </tbody>
                 </table>
-            </div>
+            </div>}
+            
         </div>
     );
 }
