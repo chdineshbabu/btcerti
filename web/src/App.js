@@ -18,7 +18,7 @@ function App() {
         </Route>
         <Route path="/review" element={<Review />} /> 
         <Route path="/generated" element={<Post />} /> 
-        <Route path="/certificate" element={<Certificate />} /> 
+        <Route path="/certificate/:id" element={<Certificate />} /> 
       </Routes>
     </BrowserRouter>
   );

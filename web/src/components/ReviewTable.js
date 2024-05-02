@@ -2,8 +2,18 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 function ReviewTable() {
-    const [data, setData] = useState([]);
+    const [data, setData] = useState(null);
+    const [verifyData, setVerifyData] = useState(null);
     const baseURL = 'http://localhost:3001/api/verify';
+
+    const fetchVerifyData = async () => {
+        try {
+            const response = await axios.get('http://localhost:3001/api/verifyRec');
+            setVerifyData(response.data);
+        } catch (error) {
+            console.error('Error fetching verification data:', error);
+        }
+    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -15,10 +25,9 @@ function ReviewTable() {
             }
         };
         fetchData();
-    }, [data]);
-
+        fetchVerifyData();
+    }, []);
     const verifyCertificate = async (studentName, enrolledDate, courseTitle, studentEmail, certificateProvider) => {
-        console.log(studentName, enrolledDate, courseTitle, studentEmail, certificateProvider)
         try {
             const response = await axios.post('http://localhost:3001/api/generate', {
                 studentName,
@@ -26,11 +35,10 @@ function ReviewTable() {
                 courseTitle,
                 studentEmail,
                 certificateProvider
-                
             });
             console.log('Certificate verification response:', response.data);
         } catch (error) {
-            console.error('Error generating certificate:', error);  
+            console.error('Error generating certificate:', error);
         }
     };
 
@@ -59,38 +67,58 @@ function ReviewTable() {
                                     Certificate Provider
                                 </th>
                                 <th scope="col" className="px-6 py-3">
-                                    Blockchain Verify
+                                    Action
                                 </th>
                             </tr>
                         </thead>
                         <tbody>
-                            {data.map((student, index) => (
-                                <tr key={index} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                    <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        {student.studentName}
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        {student.enrolledDate}
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        {student.courseTitle}
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        {student.studentEmail}
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        {student.certificateProvider}
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        <button
-                                            onClick={() => verifyCertificate(student.studentName, student.enrolledDate, student.courseTitle, student.studentEmail, student.certificateProvider)}
-                                            className='bg-cusred px-8 py-2 text-white rounded-lg'
-                                        >
-                                            Verify
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))}
+                            {data.map((student, index) => {
+                                const matchingVerifyData = verifyData && verifyData.find(record => record.studentEmail === student.studentEmail);
+                                const certificateId = matchingVerifyData ? matchingVerifyData.certificateId : null;
+
+
+                                return (
+                                    <tr key={index} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                        <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                            {student.studentName}
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            {student.enrolledDate}
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            {student.courseTitle}
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            {student.studentEmail}
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            {student.certificateProvider}
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            {certificateId ? (
+                                                <a href={`certificate/` + certificateId} className="text-blue-500 hover:underline">
+                                                    View Certificate
+                                                </a>
+                                            ) : (
+                                                <button
+                                                    onClick={() =>
+                                                        verifyCertificate(
+                                                            student.studentName,
+                                                            student.enrolledDate,
+                                                            student.courseTitle,
+                                                            student.studentEmail,
+                                                            student.certificateProvider
+                                                        )
+                                                    }
+                                                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                                                >
+                                                    Verify
+                                                </button>
+                                            )}
+                                        </td>
+                                    </tr>
+                                );
+                            })}
                         </tbody>
                     </table>
                 </div>

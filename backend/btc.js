@@ -7,8 +7,8 @@ const contractData = JSON.parse(fs.readFileSync(contractDataPath));
 const contractAbi = contractData.abi;
 const contractAddress = '0x231D70bAc673EC706FC41C4BDA4FD1EF4dBa8442';
 const stringStorageContract = new web3.eth.Contract(contractAbi, contractAddress);
-const account = '0x3d031F82d5fB5Eef6A071d539E882c970bF5d315';
-const privateKey = '0f657ddecdc38a82c04230d404514aaf461b45530a5be78795ef0dd558ed4473';
+const account = '0xB3AF573273F4baBC166A111175FDf6215525924b';
+const privateKey = 'f2dbbf521caeb4d00364c6925f22eb90259039d11b7623b8d7457e4e50389030';
 async function enrollStudent(studentName, courseTitle, studentEmail, certificateProvider, certificateId) {
     try {
         const contractFunction = stringStorageContract.methods.enrollStudent(

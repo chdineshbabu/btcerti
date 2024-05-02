@@ -1,10 +1,11 @@
 const mongoose = require('mongoose');
 
 const generatedCertificate = new mongoose.Schema({
-  StudentName: String,
+  studentName: String,
   enrollmentDate: String,
   courseTitle: String,
   studentEmail: String,
+  courseEmail:String,
   certificateProvider: String,
   certificateId : String,
   issueDate:Date,
@@ -16,5 +17,6 @@ const generatedCertificate = new mongoose.Schema({
 
   // Add more fields as needed
 });
+const certificate = mongoose.model('certificate', generatedCertificate);
 
-module.exports = mongoose.model('User', userSchema);
+module.exports = certificate
